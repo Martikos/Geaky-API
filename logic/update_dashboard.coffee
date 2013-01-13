@@ -1,10 +1,33 @@
 async = require "async"
 fs = require "fs"
 request = require "request"
+member_module = require "../routes/members"
 
 interval_mins = 1 # update interval in minutes
 
 exports.interval_ms = interval_ms = interval_mins * 60 * 1000
+
+# Helpers 
+
+compare = (old_user, new_user, callback) ->
+  if old_user.name is new_user.name and old_user.login is new_user.login and old_user.blog is new_user.blog and old_user.followers is new_user.followers and old_user.following is new_user.following and old_user.stars is new_user.stars
+    return true
+  else
+    return false
+
+create = (member) ->
+  user =
+    id : member.id,
+    login : member.login,
+    name : member.name,
+    gravatar : member.gravatar,
+    blog : member.blog,
+    url : member.url,
+    repos : member.repos,
+    following : member.following,
+    followers : member.followers,
+    stars : member.stars
+  user
 
 exports.update_database = ->
 
@@ -78,57 +101,16 @@ exports.update_database = ->
           new_user.followers = member.followers
           new_user.stars = member.starred_count
 
-          request.get "http://loss-api.herokuapp.com/members?login=" + new_user.login, (err, res, body) ->
-            results = JSON.parse(body)
-            if results.length is 0
-              request.post "http://loss-api.herokuapp.com/members",
-                headers:
-                  "dpd-ssh-key": process.env.dpd_key
+          member_module.get_member new_user.login, (err, old_user) ->
+            if err
+              console.log err
+            else 
+              if !old_user
+                console.log "Adding User: " + new_user.login
+                member_module.post_member new_user
+              else
+                old_user = old_user[0]
+                if !compare old_user, new_user
+                  console.log "Updating User: " + new_user.login
+                  member_module.update_member new_user
 
-                form: new_user
-              , (err, res, body) ->
-                if err or JSON.parse(body).status is 401
-                  console.log "Error Posting User " + member.login + " : " + body
-                else
-                  console.log "Added User: " + new_user.login
-
-            else
-              old_user = create(results[0])
-              if old_user isnt `undefined` and not compare(old_user, new_user)
-                request.put "http://loss-api.herokuapp.com/members?id=" + old_user.id,
-                  headers:
-                    "dpd-ssh-key": process.env.dpd_key
-
-                  form: new_user
-                , (err, res, body) ->
-                  if err or JSON.parse(body).status is 401
-                    console.log "Error Updating User " + member.login + " : " + body
-                  else
-                    console.log "Updated User: " + old_user.login
-
-        fs.writeFile "users", JSON.stringify(members), (err) ->
-          if err
-            console.log err
-          else
-            date = new Date()
-            console.log "File updated - " + date
-
-compare = (oldmember, newmember) ->
-  if oldmember.name is newmember.name and oldmember.login is newmember.login and oldmember.blog is newmember.blog and oldmember.followers is newmember.followers and oldmember.following is newmember.following and oldmember.stars is newmember.stars
-    true
-  else
-    false
-
-create = (member) ->
-  user =
-    id : memberid
-    login : memberlogin
-    name : membername
-    gravatar : membergravatar
-    blog : memberblog
-    url : memberurl
-    repos : memberrepos
-    following : memberfollowing
-    followers : memberfollowers
-    stars : memberstars
-  user
