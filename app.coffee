@@ -28,6 +28,7 @@ routes = require("./routes/members").routes app
 update_dashboard = require "./logic/update_dashboard"
 update_database = update_dashboard.update_database
 interval_ms = update_dashboard.interval_ms
+update_database()
 setInterval update_database, interval_ms
 
 
