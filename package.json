@@ -10,7 +10,9 @@
     "jade": "*",
     "mongoose": "3.5.x",
     "async": "0.1.x",
-    "request": "2.12.x"
+    "request": "2.12.x",
+    "coffee-script": "1.1.2"
+}
   },
   "engines": {
     "node": "0.8.x",
