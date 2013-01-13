@@ -45,7 +45,7 @@ get_members = () ->
       return results
 
 get_member = (login, callback) ->
-  Member.find login: login, (err, results) ->
+  Member.findOne login: login, (err, results) ->
     if err
       return callback err, {}
     else

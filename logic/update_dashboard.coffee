@@ -32,6 +32,7 @@ create = (member) ->
 
 exports.update_database = ->
 
+  console.log "Updating Database ... "
   users = []
 
   org_url = "https://api.github.com/orgs/Lebanese-OSS/members" + "?&per_page=100&client_id=" + process.env.github_clientid + "&client_secret=" + process.env.github_clientsecret
@@ -110,7 +111,6 @@ exports.update_database = ->
                 console.log "Adding User: " + new_user.login
                 member_module.post_member new_user
               else
-                old_user = old_user[0]
                 if !compare old_user, new_user
                   console.log "Updating User: " + new_user.login
                   member_module.update_member new_user
