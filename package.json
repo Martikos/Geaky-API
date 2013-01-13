@@ -11,5 +11,9 @@
     "mongoose": "3.5.x",
     "async": "0.1.x",
     "request": "2.12.x"
+  },
+  "engines": {
+    "node": "0.8.x",
+    "npm": "1.1.x"
   }
 }
