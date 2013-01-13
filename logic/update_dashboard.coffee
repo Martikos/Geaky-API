@@ -26,6 +26,7 @@ create = (member) ->
     repos : member.repos,
     following : member.following,
     followers : member.followers,
+    repos: member.repos,
     stars : member.stars
   user
 
@@ -99,6 +100,7 @@ exports.update_database = ->
           new_user.repos = member.public_repos
           new_user.following = member.following
           new_user.followers = member.followers
+          new_user.repos = member.repos
           new_user.stars = member.starred_count
 
           member_module.get_member new_user.login, (err, old_user) ->

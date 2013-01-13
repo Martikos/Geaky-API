@@ -11,6 +11,7 @@ member = new Schema
   followers: Number,
   following: Number,
   stars: Number,
+  repos: Number,
   url: String
 
 Member = mongoose.model "member", member
@@ -62,6 +63,7 @@ post_member = (member) ->
     url: member.url,
     followers: member.followers,
     following: member.following,
+    repos: member.repos,
     stars: member.stars
   new_member.save (err, result) ->
     if err
@@ -70,7 +72,7 @@ post_member = (member) ->
       return result
 
 update_member = (new_member) ->
-  Member.update login: new_member.login, { name: new_member.name, blog: new_member.blog, gravatar: new_member.gravatar, url: new_member.url, repos: new_member.repos, following: new_member.following, followers: new_member.followers, stars: new_member.stars}, (err, result) ->
+  Member.update login: new_member.login, { name: new_member.name, blog: new_member.blog, gravatar: new_member.gravatar, url: new_member.url, repos: new_member.repos, following: new_member.following, followers: new_member.followers, repos: new_member.repos, stars: new_member.stars}, (err, result) ->
     if err
       return err
     else
