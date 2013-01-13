@@ -24,6 +24,13 @@ app.configure "development", ->
 
 routes = require("./routes/members").routes app
 
+# Dashboard Update #
+update_dashboard = require "./logic/update_dashboard"
+update_database = update_dashboard.update_database
+interval_ms = update_dashboard.interval_ms
+setInterval update_database, interval_ms
+
+
 http.createServer(app).listen app.get("port"), ->
   console.log "Express server listening on port " + app.get("port")
 
