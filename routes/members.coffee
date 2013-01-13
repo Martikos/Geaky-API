@@ -2,6 +2,7 @@
 # * GET members listing.
 # 
 mongoose = require "mongoose"
+Schema = mongoose.Schema
 
 member = new Schema
   login: String,
@@ -14,9 +15,15 @@ member = new Schema
   url: String
 
 Member = mongoose.model "member", member
+mongoose.connect "linus.mongohq.com", "loss", 10039, user: process.env.mongohq_username ,pass: process.env.mongohq_password
 
 exports.routes = (app) ->
   app.get "/members", (req, res) ->
+    Member.find {}, (err, res) ->
+      if err
+        console.log err
+      else
+        console.log res
     res.send "getting from database"
 
   app.post "/members", (req, res) ->
