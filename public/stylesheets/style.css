@@ -1,8 +1,63 @@
+@font-face {
+  font-family: 'chunkfive';
+  src: url('/fonts/Chunkfive.otf');
+  font-weight: 200;
+}
+@font-face {
+  font-family: 'modernpics';
+  src: url('/fonts/modernpics.otf');
+  font-weight: 200;
+}
+
 body {
   padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  background: url('/images/fabric.png');
 }
 
 a {
   color: #00B7FF;
+}
+
+#masthead {
+  text-align: center;
+  color: #EEE;
+}
+#masthead .masthead-title {
+  font-family: 'chunkfive';
+  letter-spacing: 14px;
+  text-align: center;
+  font-size: 64px;
+
+  text-shadow: 0px 1px 5px #000;
+
+}
+#masthead .masthead-info {
+  margin-top: -80px;
+  font-size: 22px;
+  text-shadow: 0px 1px 5px #000;
+  letter-spacing: 1px;
+}
+hr {
+  margin-top: 20px;
+  width: 40%;
+}
+
+#apps {
+  font-family: 'modernpics';
+  text-align: center;
+}
+#apps p {
+  margin-top: 40px;
+}
+#apps a {
+  cursor: pointer;
+  font-size: 100px;
+  color: #bbb;
+  text-shadow: 0px 1px 5px #000;
+  text-decoration: none;
+}
+#apps a:hover {
+  color: #eef;
+  text-shadow: 0px 1px 0px #000;
 }
