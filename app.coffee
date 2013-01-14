@@ -23,6 +23,7 @@ app.configure "development", ->
   app.use express.errorHandler()
 
 routes = require("./routes/members").routes app
+index = require("./routes/index").index app
 
 # Dashboard Update #
 update_dashboard = require "./logic/update_dashboard"

@@ -2,7 +2,9 @@
 #
 # * GET home page.
 # 
-exports.index = (req, res) ->
-  res.render "index",
-    title: "Express"
+exports.index = (app) ->
+  app.get '/', (request, response) ->
+    response.render "index",
+      title: "Lebanese Open Source Initiative"
+
 
