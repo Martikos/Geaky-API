@@ -55,7 +55,7 @@ delete_member = (login) ->
   Member.find(login: login).remove()
 
 post_member = (member) ->
-  Member new_member = 
+  new_member = new Member
     login: member.login,
     name: member.name,
     gravatar: member.gravatar,

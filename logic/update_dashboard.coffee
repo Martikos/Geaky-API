@@ -3,7 +3,7 @@ async = require "async"
 request = require "request"
 member_module = require "../routes/members"
 
-interval_mins = 10 # update interval in minutes
+interval_mins = 5 # update interval in minutes
 
 exports.interval_ms = interval_ms = interval_mins * 60 * 1000
 
