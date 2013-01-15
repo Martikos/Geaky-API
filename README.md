@@ -13,12 +13,15 @@ These environment variables need to be set:
 #### Clone Repo
 ```
 git clone git@github.com:Martikos/Losi-API.git
+
 cd Losi-API
+
 npm install
 ```
 #### Install Global Dependencies
 ```
 npm install -g coffeescript
+
 npm install -g foreman
 ```
 ## Run Server
