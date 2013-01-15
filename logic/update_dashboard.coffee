@@ -3,7 +3,7 @@ async = require "async"
 request = require "request"
 member_module = require "../routes/members"
 
-interval_mins = 1 # update interval in minutes
+interval_mins = 10 # update interval in minutes
 
 exports.interval_ms = interval_ms = interval_mins * 60 * 1000
 
@@ -17,7 +17,6 @@ compare = (old_user, new_user, callback) ->
 
 create = (member) ->
   user =
-    id : member.id,
     login : member.login,
     name : member.name,
     gravatar : member.gravatar,
@@ -29,6 +28,7 @@ create = (member) ->
     repos: member.repos,
     stars : member.stars
   user
+  
 
 exports.update_database = ->
 
@@ -45,73 +45,82 @@ exports.update_database = ->
         if error
           console.log "Could Not Get " + member.login + " User Information: " + error
         else
-          member = JSON.parse(body)
-          member.starred_count = 0
-          new_members.push member
-          count++
-          callback new_members  if count is members.length
+          try 
+            member = JSON.parse(body)
+            member.starred_count = 0
+            new_members.push member
+            count++
+            callback new_members  if count is members.length
+          catch e
+            console.log "JSON Parse Error: Bad Response."
 
   request org_url, (error, response, body) ->
-    members = JSON.parse(body)
-    reset members, (members) ->
-      index = 0
-      async.whilst (->
-        index < members.length
-      ), ((callback) ->
-        FinishedQuery = undefined
-        Repos = undefined
-        page = undefined
-        Repos = []
-        FinishedQuery = false
-        page = 1
+    try 
+      members = JSON.parse(body)
+      reset members, (members) ->
+        index = 0
         async.whilst (->
-          not FinishedQuery
+          index < members.length
         ), ((callback) ->
-          url = undefined
-          url = "https://api.github.com/users/" + members[index].login + "/starred?page=" + page + "&per_page=100&client_id=" + process.env.github_clientid + "&client_secret=" + process.env.github_clientsecret
-          request url, (error, response, body) ->
-            if not error and response.statusCode is 200 and body.length > 2
-              JSON.parse(body).forEach (newRepo) ->
-                Repos.push newRepo
-                members[index].starred_count++
-                Repos.push newRepo
+          FinishedQuery = undefined
+          Repos = undefined
+          page = undefined
+          Repos = []
+          FinishedQuery = false
+          page = 1
+          async.whilst (->
+            not FinishedQuery
+          ), ((callback) ->
+            url = undefined
+            url = "https://api.github.com/users/" + members[index].login + "/starred?page=" + page + "&per_page=100&client_id=" + process.env.github_clientid + "&client_secret=" + process.env.github_clientsecret
+            request url, (error, response, body) ->
+              if not error and response.statusCode is 200 and body.length > 2
+                try 
+                  JSON.parse(body).forEach (newRepo) ->
+                    Repos.push newRepo
+                    members[index].starred_count++
+                    Repos.push newRepo
 
-              Repos.forEach (repo) ->
-                repo
+                  Repos.forEach (repo) ->
+                    repo
 
-              page++
-              callback()
-            else
-              FinishedQuery = true
-              callback()
+                  page++
+                  callback()
+                catch e
+                  console.log "JSON Parse Error: Bad Response."
+              else
+                FinishedQuery = true
+                callback()
+
+          ), (err) ->
+            index++
+            callback()
 
         ), (err) ->
-          index++
-          callback()
+          members.forEach (member) ->
 
-      ), (err) ->
-        members.forEach (member) ->
+            new_user = {}
+            new_user.login = member.login
+            new_user.name = if member.name? then member.name else ""
+            new_user.gravatar = if member.gravatar_id? then member.gravatar_id else ""
+            new_user.blog = if member.blog? then member.blog else ""
+            new_user.url = if member.html_url? then member.html_url else ""
+            new_user.repos = member.public_repos
+            new_user.following = member.following
+            new_user.followers = member.followers
+            new_user.stars = member.starred_count
 
-          new_user = {}
-          new_user.login = member.login
-          new_user.name = if member.name? then member.name else ""
-          new_user.gravatar = if member.gravatar_id? then member.gravatar_id else ""
-          new_user.blog = if member.blog? then member.blog else ""
-          new_user.url = if member.html_url? then member.html_url else ""
-          new_user.repos = member.public_repos
-          new_user.following = member.following
-          new_user.followers = member.followers
-          new_user.stars = member.starred_count
-
-          member_module.get_member new_user.login, (err, old_user) ->
-            if err
-              console.log err
-            else 
-              if !old_user
-                console.log "Adding User: " + new_user.login
-                member_module.post_member new_user
-              else
-                if !compare old_user, new_user
-                  console.log "Updating User: " + new_user.login
-                  member_module.update_member new_user
+            member_module.get_member new_user.login, (err, old_user) ->
+              if err
+                console.log err
+              else 
+                if !old_user
+                  console.log "Adding User: " + new_user.login
+                  member_module.post_member new_user
+                else
+                  if !compare old_user, new_user
+                    console.log "Updating User: " + new_user.login
+                    member_module.update_member new_user
+    catch e
+      "JSON Parse Error: Bad Response."
 
