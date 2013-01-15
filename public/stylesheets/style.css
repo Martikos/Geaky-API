@@ -8,6 +8,10 @@
   src: url('/fonts/modernpics.otf');
   font-weight: 200;
 }
+@font-face {
+  font-family: 'telopone';
+  src: url('/fonts/telopone.ttf');
+}
 
 body {
   padding: 50px;
@@ -22,25 +26,32 @@ a {
 #masthead {
   text-align: center;
   color: #EEE;
+  cursor: pointer;
 }
 #masthead .masthead-title {
-  font-family: 'chunkfive';
-  letter-spacing: 14px;
+  font-family: 'telopone';
   text-align: center;
   font-size: 64px;
-
-  text-shadow: 0px 1px 5px #000;
-
+  letter-spacing: 3px;
+  text-shadow: 0px 2px 5px #222;
+  text-decoration: none;
 }
 #masthead .masthead-info {
-  margin-top: -80px;
-  font-size: 22px;
+  margin-top: -50px;
+  font-size: 17px;
   text-shadow: 0px 1px 5px #000;
   letter-spacing: 0px;
 }
+#masthead p.masthead-title a#g { color: #ff4500; }
+#masthead p.masthead-title a#e { color: #ff9000; }
+#masthead p.masthead-title a#a { color: #e20048; }
+#masthead p.masthead-title a#k { color: #057d9f; }
+#masthead p.masthead-title a#y { color: #f00; }
+
 hr {
   margin-top: 20px;
-  width: 330px;
+  width: 260px;
+  color: #222;
 }
 
 #apps {
@@ -53,8 +64,10 @@ hr {
 #apps a {
   cursor: pointer;
   font-size: 100px;
-  color: #bbb;
-  text-shadow: 0px 1px 5px #000;
+  // color: #bbb;
+  color: #555;
+  // text-shadow: 0px 1px 5px #000;
+  text-shadow: 0px 1px 0px rgba(22, 22, 22, 1);
   text-decoration: none;
 }
 #apps a:hover {
