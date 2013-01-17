@@ -39,8 +39,9 @@ a {
 #masthead .masthead-info {
   margin-top: -50px;
   font-size: 17px;
-  text-shadow: 0px 1px 5px #000;
+  //text-shadow: 0px 1px 5px #000;
   letter-spacing: 0px;
+  text-shadow : 0px 1px 5px #000;
 }
 #masthead p.masthead-title a#g { color: #ff4500; }
 #masthead p.masthead-title a#e { color: #ff9000; }
@@ -49,9 +50,14 @@ a {
 #masthead p.masthead-title a#y { color: #f00; }
 
 hr {
-  margin-top: 20px;
-  width: 260px;
+  margin-top: 45px;
+  //width: 245px;
+  width: 500px;
   color: #222;
+  height: 1px;
+  border: 0px;
+  background-color: #777;
+  box-shadow: 0px 1px 2px #000;
 }
 
 #apps {
