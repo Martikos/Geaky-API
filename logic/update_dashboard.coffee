@@ -34,7 +34,6 @@ exports.update_database = ->
 
   console.log "Updating Database ... "
   users = []
-
   org_url = "https://api.github.com/orgs/Lebanese-OSS/members" + "?&per_page=100&client_id=" + process.env.github_clientid + "&client_secret=" + process.env.github_clientsecret
   reset = (members, callback) ->
     count = 0
