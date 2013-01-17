@@ -10,7 +10,7 @@ exports.interval_ms = interval_ms = interval_mins * 60 * 1000
 # Helpers 
 
 compare = (old_user, new_user, callback) ->
-  if old_user.name is new_user.name and old_user.login is new_user.login and old_user.blog is new_user.blog and old_user.gravatar is new_user.gravatar and old_user.followers is new_user.followers and old_user.following is new_user.following and old_user.stars is new_user.stars and old_user.repos is new_user.repos
+  if old_user.name is new_user.name and old_user.login is new_user.login and old_user.blog is new_user.blog and old_user.gravatar is new_user.gravatar and old_user.followers is new_user.followers and old_user.following is new_user.following and old_user.stars is new_user.stars and old_user.repos is new_user.repos and old_user.url is new_user.url
     return true
   else
     return false
@@ -103,6 +103,9 @@ exports.update_database = ->
             new_user.name = if member.name? then member.name else ""
             new_user.gravatar = if member.gravatar_id? then member.gravatar_id else ""
             new_user.blog = if member.blog? then member.blog else ""
+            console.log new_user.blog.substring 0, 4
+            if new_user.blog.substring(0, 4) != 'http' and new_user.blog != ''
+              new_user.blog = 'http://' + new_user.blog;
             new_user.url = if member.html_url? then member.html_url else ""
             new_user.repos = member.public_repos
             new_user.following = member.following
