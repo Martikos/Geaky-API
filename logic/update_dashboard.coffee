@@ -30,6 +30,27 @@ create = (member) ->
   user
   
 
+exports.update_languages = ->
+  console.log "Updating Database (Languages) ..."
+  org_url = "https://api.github.com/orgs/Lebanese-OSS/members" + "?&per_page=100&client_id=" + process.env.github_clientid + "&client_secret=" + process.env.github_clientsecret
+  request org_url, (error, response, body) ->
+    if error
+      console.log "Github API Error: Could Not Get Organization Members"
+    else
+      try 
+        members = JSON.parse(body)
+        members.forEach (member) ->
+          languages_url = "https://api.github.com/users/" + member.login + "?&per_page=100&client_id=" + process.env.github_clientid + "&client_secret=" + process.env.github_clientsecret
+          request languages_url, (error_languages, response_languages, body_languages) ->
+            if error_languages
+              console.log "Could Not Get User Languages"
+            else
+              try
+                languages = JSON.parse body_languages
+      catch e
+        console.log "JSON Parse Error: Bad Response."
+  
+
 exports.update_database = ->
 
   console.log "Updating Database ... "
