@@ -41,7 +41,6 @@ exports.update_languages = ->
         members = JSON.parse(body)
         members.forEach (member) ->
           languages_url = "https://api.github.com/users/" + member.login + "?&per_page=100&client_id=" + process.env.github_clientid + "&client_secret=" + process.env.github_clientsecret
-          languages_url = ''
           request languages_url, (error_languages, response_languages, body_languages) ->
             if error_languages
               console.log "Could Not Get User Languages"
